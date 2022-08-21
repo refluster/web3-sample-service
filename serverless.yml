@@ -1,0 +1,50 @@
+service: web3-sample-service
+frameworkVersion: '3'
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+  table:
+    ServerlessSkeltonTable: 'serverless-skelton-table'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-west-2
+  lambdaHashingVersion: 20201221
+
+  iam:
+    role:
+      statements:
+      - Effect: Allow
+        Action:
+        - cloudwatch:PutMetricData
+        Resource: '*'
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+          - dynamodb:DeleteItem
+        Resource:
+          - Fn::GetAtt: [ ServerlessSkeltonTable, Arn ]
+  environment:
+    TABLE_NAME: ${self:custom.table.ServerlessSkeltonTable}
+
+plugins:
+  - serverless-offline
+  - serverless-prune-plugin
+  - serverless-webpack
+
+functions:
+  createItem:
+    handler: src/handler.handler
+    events:
+      - http:
+          path: /wallet/{address}
+          method: GET
+          cors: true
