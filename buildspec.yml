@@ -1,0 +1,18 @@
+version: 0.1
+phases:
+  install:
+    runtime-version:
+      nodejs: 14
+    commands:
+      - npm i -g serverless
+      - npm i
+  build:
+    commands:
+      - sls deploy
+  #post_build:
+  #  commands:
+  #    - . ./test.sh
+artifacts:
+  files:
+    - '**/*'
+  base-directory: .serverless
