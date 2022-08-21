@@ -1,5 +1,5 @@
 import express from 'express';
-import itemRoute from './itemRoute';
+import walletRoute from './walletRoute';
 
 const indexRoute = express.Router({
 	mergeParams: true,
@@ -11,6 +11,6 @@ indexRoute.use((req, res, next) => {
 	next();
 });
 
-indexRoute.use('/item', itemRoute);
+indexRoute.use('/wallet', walletRoute);
 
 export default indexRoute;
